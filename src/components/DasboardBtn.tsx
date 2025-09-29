@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import { SparklesIcon } from "lucide-react";
-import { useUserRole } from "../hooks/useUserRole";
+import { useUserRole } from "./hooks/useUserRole";
 function DasboardBtn() {
   const { isCandidate, isLoading } = useUserRole();
 

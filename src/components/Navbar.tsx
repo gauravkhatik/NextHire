@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { ModeToggle } from "./ui/ModeToggle";
+import { ModeToggle } from "../../public/ModeToggle";
 import { CodeIcon } from "lucide-react";
 import { SignedIn, UserButton } from "@clerk/nextjs";
-import DasboardBtn from "./ui/DasboardBtn";
+import DasboardBtn from "./DasboardBtn";
 
 function Navbar() {
   return (
