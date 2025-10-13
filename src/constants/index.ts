@@ -1,4 +1,3 @@
-
 import { Clock, Code2, Calendar, Users } from "lucide-react";
 
 export const INTERVIEW_CATEGORY = [
@@ -25,11 +24,11 @@ export const TIME_SLOTS = [
   "15:30",
   "16:00",
   "16:30",
-  "17:00",
+  "23:00",
 ];
 
 export const QUICK_ACTIONS = [
-  {
+   {
     icon: Code2,
     title: "New Call",
     description: "Start an instant call",

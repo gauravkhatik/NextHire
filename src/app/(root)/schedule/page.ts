@@ -1,8 +1,8 @@
 // File: /Users/gauravkhatik/Desktop/online_platform/src/app/page.tsx
-import * as entry from '../page.jsx'
+import * as entry from '../../page.jsx'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../page.jsx')
+type TEntry = typeof import('../../page.jsx')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }
@@ -30,22 +30,18 @@ checkFields<Diff<{
 }, TEntry, ''>>()
 
 
-// Check the prop type of the entry function
 checkFields<Diff<PageProps, FirstArg<TEntry['default']>, 'default'>>()
 
-// Check the arguments and return type of the generateMetadata function
 if ('generateMetadata' in entry) {
   checkFields<Diff<PageProps, FirstArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
   checkFields<Diff<ResolvingMetadata, SecondArg<MaybeField<TEntry, 'generateMetadata'>>, 'generateMetadata'>>()
 }
 
-// Check the arguments and return type of the generateViewport function
 if ('generateViewport' in entry) {
   checkFields<Diff<PageProps, FirstArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
   checkFields<Diff<ResolvingViewport, SecondArg<MaybeField<TEntry, 'generateViewport'>>, 'generateViewport'>>()
 }
 
-// Check the arguments and return type of the generateStaticParams function
 if ('generateStaticParams' in entry) {
   checkFields<Diff<{ params: SegmentParams }, FirstArg<MaybeField<TEntry, 'generateStaticParams'>>, 'generateStaticParams'>>()
   checkFields<Diff<{ __tag__: 'generateStaticParams', __return_type__: any[] | Promise<any[]> }, { __tag__: 'generateStaticParams', __return_type__: ReturnType<MaybeField<TEntry, 'generateStaticParams'>> }>>()
@@ -61,11 +57,8 @@ export interface LayoutProps {
   params?: Promise<SegmentParams>
 }
 
-// =============
-// Utility types
 type RevalidateRange<T> = T extends { revalidate: any } ? NonNegative<T['revalidate']> : never
 
-// If T is unknown or any, it will be an empty {} type. Otherwise, it will be the same as Omit<T, keyof Base>.
 type OmitWithTag<T, K extends keyof any, _M> = Omit<T, K>
 type Diff<Base, T extends Base, Message extends string = ''> = 0 extends (1 & T) ? {} : OmitWithTag<T, keyof Base, Message>
 
@@ -77,7 +70,6 @@ type MaybeField<T, K extends string> = T extends { [k in K]: infer G } ? G exten
 
 function checkFields<_ extends { [k in keyof any]: never }>() {}
 
-// https://github.com/sindresorhus/type-fest
 type Numeric = number | bigint
 type Zero = 0 | 0n
 type Negative<T extends Numeric> = T extends Zero ? never : `${T}` extends `-${string}` ? T : never

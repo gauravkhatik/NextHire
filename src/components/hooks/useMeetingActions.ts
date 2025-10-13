@@ -16,8 +16,7 @@ const useMeetingActions = () => {
 
     try {
       const id = crypto.randomUUID();
-      alert(id);
-      const call = client.call(" ",id);
+      const call = client.call("default", id);
 
       await call.getOrCreate({
         data: {

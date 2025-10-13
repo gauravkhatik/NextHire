@@ -1,7 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
-// add a new comment
 export const addComment = mutation({
   args: {
     interviewId: v.id("interviews"),
@@ -21,7 +20,6 @@ export const addComment = mutation({
   },
 });
 
-// get all comments for an interview
 export const getComments = query({
   args: { interviewId: v.id("interviews") },
   handler: async (ctx, args) => {
