@@ -1,12 +1,23 @@
-import { CallRecording } from "@stream-io/video-react-sdk";
+import { CallRecording, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
 import { calculateRecordingDuration } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
-import { CalendarIcon, ClockIcon, CopyIcon, PlayIcon } from "lucide-react";
+import { CalendarIcon, ClockIcon, CopyIcon, PlayIcon, Trash2Icon } from "lucide-react";
 import { Button } from "./ui/button";
 
-function RecordingCard({ recording }: { recording: CallRecording }) {
+function RecordingCard({
+  recording,
+  callId,
+  callType,
+  onDeleted,
+}: {
+  recording: CallRecording;
+  callId: string;
+  callType: string;
+  onDeleted?: (sessionId: string, filename: string) => void;
+}) {
+  const client = useStreamVideoClient();
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(recording.url);
@@ -24,6 +35,27 @@ function RecordingCard({ recording }: { recording: CallRecording }) {
     recording.start_time && recording.end_time
       ? calculateRecordingDuration(recording.start_time, recording.end_time)
       : "Unknown duration";
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch("/api/stream/recordings/delete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          callId,
+          callType,
+          session: recording.session_id,
+          filename: recording.filename,
+        }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      toast.success("Recording deleted");
+      onDeleted?.(recording.session_id, recording.filename);
+    } catch (e) {
+      console.error(e);
+      toast.error("Failed to delete recording");
+    }
+  };
 
   return (
     <Card className="group hover:shadow-md transition-all">
@@ -62,6 +94,9 @@ function RecordingCard({ recording }: { recording: CallRecording }) {
         </Button>
         <Button variant="secondary" onClick={handleCopyLink}>
           <CopyIcon className="size-4" />
+        </Button>
+        <Button variant="destructive" onClick={handleDelete}>
+          <Trash2Icon className="size-4" />
         </Button>
       </CardFooter>
     </Card>
