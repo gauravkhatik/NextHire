@@ -50,7 +50,14 @@ function InterviewScheduleUI() {
   });
 
   const scheduleMeeting = async () => {
-    if (!client || !user) return;
+    if (!client || !user) {
+      toast.error("Stream client or user not available");
+      return;
+    }
+    if (!formData.title || formData.title.trim() === "") {
+      toast.error("Please enter an interview title");
+      return;
+    }
     if (!formData.candidateId || formData.interviewerIds.length === 0) {
       toast.error("Please select both candidate and at least one interviewer");
       return;
@@ -77,9 +84,9 @@ function InterviewScheduleUI() {
         },
       });
 
-      await createInterview({
-        title,
-        description,
+      const interviewId = await createInterview({
+        title: title.trim(),
+        description: description?.trim() || undefined,
         startTime: meetingDate.getTime(),
         status: "upcoming",
         streamCallId: id,
@@ -87,6 +94,7 @@ function InterviewScheduleUI() {
         interviewerIds,
       });
 
+      console.log("Interview created with ID:", interviewId);
       setOpen(false);
       toast.success("Meeting scheduled successfully!");
 
@@ -99,8 +107,9 @@ function InterviewScheduleUI() {
         interviewerIds: user?.id ? [user.id] : [],
       });
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to schedule meeting. Please try again.");
+      console.error("Error scheduling meeting:", error);
+      const errorMessage = error instanceof Error ? error.message : "Failed to schedule meeting. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsCreating(false);
     }

@@ -10,9 +10,19 @@ http.route({
   path: "/clerk-webhook",
   method: "POST",
   handler: httpAction(async (ctx, request) => {
-    const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
+    // Try both CLERK_WEBHOOK_SECRET and CLERK_WEBHOOK for compatibility
+    const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || process.env.CLERK_WEBHOOK;
     if (!webhookSecret) {
-      throw new Error("Missing CLERK_WEBHOOK_SECRET environment variable");
+      console.error("Missing CLERK_WEBHOOK_SECRET or CLERK_WEBHOOK environment variable. Please set it in your Convex dashboard.");
+      return new Response(
+        JSON.stringify({ 
+          error: "Webhook secret not configured. Please set CLERK_WEBHOOK_SECRET or CLERK_WEBHOOK in Convex environment variables." 
+        }),
+        { 
+          status: 500,
+          headers: { "Content-Type": "application/json" }
+        }
+      );
     }
 
     const svix_id = request.headers.get("svix-id");
