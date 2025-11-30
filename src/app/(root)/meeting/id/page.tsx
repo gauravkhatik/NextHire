@@ -10,13 +10,25 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 
 function MeetingPage() {
-  const { id } = useParams();
+  const params = useParams();
   const { isLoaded } = useUser();
-  const { call, isCallLoading } = useGetCallById(id);
+  const id = params?.id;
+  
+  // Ensure id is a string (not array or undefined)
+  const callId = typeof id === "string" ? id : Array.isArray(id) ? id[0] : "";
+  const { call, isCallLoading } = useGetCallById(callId);
 
   const [isSetupComplete, setIsSetupComplete] = useState(false);
 
   if (!isLoaded || isCallLoading) return <LoaderUI />;
+  
+  if (!callId) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <p className="text-2xl font-semibold">Invalid meeting ID</p>
+      </div>
+    );
+  }
 
   if (!call) {
     return (
