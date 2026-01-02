@@ -1,4 +1,4 @@
-import { Clock, Code2, Calendar, Users } from "lucide-react";
+import { Clock, Code2, Calendar, Users, PlusCircle } from "lucide-react";
 
 export const INTERVIEW_CATEGORY = [
   { id: "upcoming", title: "Upcoming Interviews", variant: "outline" },
@@ -63,6 +63,13 @@ export const QUICK_ACTIONS = [
     description: "Access past interviews",
     color: "orange-500",
     gradient: "from-orange-500/10 via-orange-500/5 to-transparent",
+  },
+  {
+    icon: PlusCircle,
+    title: "Add Question",
+    description: "Add LeetCode programming questions",
+    color: "green-500",
+    gradient: "from-green-500/10 via-green-500/5 to-transparent",
   },
 ];
 

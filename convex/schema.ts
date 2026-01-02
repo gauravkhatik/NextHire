@@ -34,6 +34,33 @@ export default defineSchema({
     interviewId: v.id("interviews"),
   }).index("by_interview_id", ["interviewId"]),
 
+  questions: defineTable({
+    title: v.string(),
+    description: v.string(),
+    difficulty: v.union(v.literal("easy"), v.literal("medium"), v.literal("hard")),
+    leetcodeUrl: v.optional(v.string()),
+    examples: v.array(v.object({
+      input: v.string(),
+      output: v.string(),
+      explanation: v.optional(v.string()),
+    })),
+    starterCode: v.object({
+      javascript: v.string(),
+      python: v.string(),
+      java: v.string(),
+    }),
+    constraints: v.optional(v.array(v.string())),
+    testCases: v.array(v.object({
+      input: v.string(),
+      expectedOutput: v.string(),
+      isHidden: v.optional(v.boolean()),
+    })),
+    createdBy: v.string(), // interviewer clerkId
+    createdAt: v.number(),
+  })
+    .index("by_created_by", ["createdBy"])
+    .index("by_difficulty", ["difficulty"]),
+
 })
 
 
