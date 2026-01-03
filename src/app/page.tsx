@@ -11,7 +11,6 @@ import MeetingModal from "@/components/MeetingModal";
 import LoaderUI from "@/components/LoaderUI";
 import { Loader2Icon } from "lucide-react";
 import MeetingCard from "@/components/MeetingCard";
-import AddQuestionDialog from "@/components/AddQuestionDialog";
 
 export default function Home() {
   const router = useRouter();
@@ -20,7 +19,6 @@ export default function Home() {
   const interviews = useQuery(api.interviews.getMyInterviews);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<"start" | "join">();
-  const [showQuestionDialog, setShowQuestionDialog] = useState(false);
 
   const handleQuickAction = (title: string) => {
     switch (title) {
@@ -31,9 +29,6 @@ export default function Home() {
       case "Join Interview":
         setModalType("join");
         setShowModal(true);
-        break;
-      case "Add Question":
-        setShowQuestionDialog(true);
         break;
       default:
         router.push(`/${title.toLowerCase()}`);
@@ -58,7 +53,7 @@ export default function Home() {
 
       {isInterviewer ? (
         <>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {QUICK_ACTIONS.map((action) => (
               <ActionCard
                 key={action.title}
@@ -73,11 +68,6 @@ export default function Home() {
             onClose={() => setShowModal(false)}
             title={modalType === "join" ? "Join Meeting" : "Start Meeting"}
             isJoinMeeting={modalType === "join"}
-          />
-
-          <AddQuestionDialog
-            open={showQuestionDialog}
-            onOpenChange={setShowQuestionDialog}
           />
         </>
       ) : (

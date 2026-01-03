@@ -6,7 +6,7 @@ import {
   SpeakerLayout,
   useCallStateHooks,
 } from "@stream-io/video-react-sdk";
-import { LayoutListIcon, LoaderIcon, UsersIcon } from "lucide-react";
+import { LayoutListIcon, LoaderIcon, UsersIcon, PlusCircleIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./ui/resizable";
@@ -20,13 +20,15 @@ import { Button } from "./ui/button";
 import EndCallButton from "../components/EndCallButton";
 import CodeEditor from "../components/CodeEditor";
 import { useUserRole } from "./hooks/useUserRole";
+import AddQuestionDialog from "../components/AddQuestionDialog";
 
 function MeetingRoom() {
   const router = useRouter();
   const [layout, setLayout] = useState<"grid" | "speaker">("speaker");
   const [showParticipants, setShowParticipants] = useState(false);
+  const [showQuestionDialog, setShowQuestionDialog] = useState(false);
   const { useCallCallingState } = useCallStateHooks();
-  const { isCandidate, isLoading: isRoleLoading } = useUserRole();
+  const { isCandidate, isInterviewer, isLoading: isRoleLoading } = useUserRole();
 
   const callingState = useCallCallingState();
 
@@ -106,7 +108,7 @@ function MeetingRoom() {
     );
   }
 
-  // For interviewers: show only video (full width)
+  // For interviewers: show only video (full width) with Add Question button
   return (
     <div className="h-[calc(100vh-4rem-1px)] relative">
       {/* VIDEO LAYOUT */}
@@ -120,6 +122,19 @@ function MeetingRoom() {
           </div>
         )}
       </div>
+
+      {/* ADD QUESTION BUTTON - Top Right */}
+      {isInterviewer && (
+        <div className="absolute top-4 right-4 z-10">
+          <Button
+            onClick={() => setShowQuestionDialog(true)}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <PlusCircleIcon className="h-4 w-4 mr-2" />
+            Add Question
+          </Button>
+        </div>
+      )}
 
       {/* VIDEO CONTROLS */}
       <div className="absolute bottom-4 left-0 right-0">
@@ -158,6 +173,14 @@ function MeetingRoom() {
           </div>
         </div>
       </div>
+
+      {/* ADD QUESTION DIALOG */}
+      {isInterviewer && (
+        <AddQuestionDialog
+          open={showQuestionDialog}
+          onOpenChange={setShowQuestionDialog}
+        />
+      )}
     </div>
   );
 }
