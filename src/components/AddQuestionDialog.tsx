@@ -43,6 +43,7 @@ interface StarterCode {
   python: string;
   java: string;
   cpp?: string;
+  sql?: string;
 }
 
 function AddQuestionDialog({ open, onOpenChange, interviewId }: { 
@@ -81,6 +82,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
           python: `def solution():\n    # Write your solution here\n    pass`,
           java: `class Solution {\n    public void solution() {\n        // Write your solution here\n        \n    }\n}`,
           cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`,
+          sql: `-- Write your SQL query here\nSELECT * FROM table_name;`,
         },
         constraints: [""],
         testCases: [{ input: "", expectedOutput: "", isHidden: false }],
@@ -101,6 +103,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
       python: `def solution():\n    # Write your solution here\n    pass`,
       java: `class Solution {\n    public void solution() {\n        // Write your solution here\n        \n    }\n}`,
       cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write your solution here\n    return 0;\n}`,
+      sql: `-- Write your SQL query here\nSELECT * FROM table_name;`,
     } as StarterCode,
     constraints: [""],
     testCases: [{ input: "", expectedOutput: "", isHidden: false }] as TestCase[],
@@ -140,6 +143,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
           python: data.starterCode?.python || formData.starterCode.python,
           java: data.starterCode?.java || formData.starterCode.java,
           cpp: data.starterCode?.cpp || formData.starterCode.cpp,
+          sql: data.starterCode?.sql || formData.starterCode.sql,
         },
         constraints: data.constraints || [""],
         testCases: data.testCases || [{ input: "", expectedOutput: "", isHidden: false }],
@@ -242,22 +246,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
       return;
     }
     
-    // For LeetCode tab, examples and test cases might be empty initially
-    // For Custom tab, we need at least one test case
-    if (activeTab === "custom") {
-      const validTestCases = formData.testCases.filter((tc) => tc.input.trim() && tc.expectedOutput.trim());
-      if (validTestCases.length === 0) {
-        toast.error("Please add at least one test case with input and expected output");
-        return;
-      }
-    } else {
-      // For LeetCode, at least one test case should exist (even if empty, we'll filter it)
-      const validTestCases = formData.testCases.filter((tc) => tc.input.trim() && tc.expectedOutput.trim());
-      if (validTestCases.length === 0) {
-        toast.error("Please ensure at least one test case is available");
-        return;
-      }
-    }
+    // Test cases are now optional - no validation required
 
     setIsCreating(true);
 
@@ -280,6 +269,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
           python: formData.starterCode.python,
           java: formData.starterCode.java,
           cpp: formData.starterCode.cpp,
+          sql: formData.starterCode.sql,
         },
         constraints: formData.constraints.filter((c) => c.trim() !== ""),
         testCases: formData.testCases
@@ -288,7 +278,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
             input: tc.input.trim(),
             expectedOutput: tc.expectedOutput.trim(),
             isHidden: tc.isHidden || false,
-          })),
+          })) || [], // Allow empty test cases array
       });
 
       // If interviewId is provided, assign question to interview
@@ -611,6 +601,23 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
                     className="font-mono text-sm"
                   />
                 </div>
+                <div className="space-y-2">
+                  <Label>SQL</Label>
+                  <Textarea
+                    rows={6}
+                    value={formData.starterCode.sql || ""}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        starterCode: {
+                          ...formData.starterCode,
+                          sql: e.target.value,
+                        },
+                      })
+                    }
+                    className="font-mono text-sm"
+                  />
+                </div>
               </CardContent>
             </Card>
 
@@ -657,7 +664,7 @@ function AddQuestionDialog({ open, onOpenChange, interviewId }: {
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg">Test Cases *</CardTitle>
+                  <CardTitle className="text-lg">Test Cases (Optional)</CardTitle>
                   <Button
                     type="button"
                     variant="outline"

@@ -6,6 +6,7 @@ const PISTON_LANGUAGES: { [key: string]: string } = {
   python: "python3",
   java: "java",
   cpp: "cpp",
+  sql: "sqlite3",
 };
 
 // Piston API configuration (free tier, no API key needed)
@@ -141,6 +142,9 @@ export async function POST(request: NextRequest) {
     if (language === "javascript") {
       // Use local execution for JavaScript (faster)
       result = await executeJavaScript(code);
+    } else if (language === "sql") {
+      // SQL execution via Piston API
+      result = await executeWithPiston(code, language);
     } else {
       // Use Piston API for all other languages (Python, Java, C++)
       result = await executeWithPiston(code, language);

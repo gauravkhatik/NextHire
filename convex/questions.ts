@@ -20,6 +20,7 @@ export const createQuestion = mutation({
       python: v.string(),
       java: v.string(),
       cpp: v.optional(v.string()),
+      sql: v.optional(v.string()),
     }),
     constraints: v.optional(v.array(v.string())),
     testCases: v.array(
@@ -41,9 +42,7 @@ export const createQuestion = mutation({
     if (!args.description || args.description.trim() === "") {
       throw new Error("Description is required");
     }
-    if (args.testCases.length === 0) {
-      throw new Error("At least one test case is required");
-    }
+    // Test cases are now optional - no validation required
 
     try {
       const questionId = await ctx.db.insert("questions", {
@@ -58,6 +57,7 @@ export const createQuestion = mutation({
           python: args.starterCode.python,
           java: args.starterCode.java,
           cpp: args.starterCode.cpp,
+          sql: args.starterCode.sql,
         },
         constraints: args.constraints || [],
         testCases: args.testCases,

@@ -19,6 +19,7 @@ const LANGUAGES = [
   { id: "python", name: "Python" },
   { id: "java", name: "Java" },
   { id: "cpp", name: "C++" },
+  { id: "sql", name: "SQL" },
 ];
 
 function CodeCompiler({ questions = [] }: { questions?: Question[] }) {
@@ -52,10 +53,11 @@ function CodeCompiler({ questions = [] }: { questions?: Question[] }) {
         language === "javascript" ? starterCode.javascript :
         language === "python" ? starterCode.python :
         language === "java" ? starterCode.java :
-        language === "cpp" ? (starterCode.cpp || "") : "";
-      setCode(codeForLanguage || `// Write your ${language} code here`);
+        language === "cpp" ? (starterCode.cpp || "") :
+        language === "sql" ? (starterCode.sql || "") : "";
+      setCode(codeForLanguage || (language === "sql" ? `-- Write your ${language} code here` : `// Write your ${language} code here`));
     } else {
-      setCode(`// Write your ${language} code here`);
+      setCode(language === "sql" ? `-- Write your ${language} code here` : `// Write your ${language} code here`);
     }
   }, [selectedQuestion, language]);
 

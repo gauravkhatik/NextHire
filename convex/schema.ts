@@ -52,6 +52,7 @@ export default defineSchema({
       python: v.string(),
       java: v.string(),
       cpp: v.optional(v.string()),
+      sql: v.optional(v.string()),
     }),
     constraints: v.optional(v.array(v.string())),
     testCases: v.array(v.object({
