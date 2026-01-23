@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Exclude Clerk from Server Actions processing
+  serverExternalPackages: ['@clerk/nextjs'],
 };
 
 export default nextConfig;

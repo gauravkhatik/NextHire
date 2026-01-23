@@ -45,3 +45,17 @@ export const getUserByClerkId = query({
     return user;
   },
 });
+
+export const getCandidates = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const candidates = await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("role"), "candidate"))
+      .collect();
+
+    return candidates;
+  },
+});

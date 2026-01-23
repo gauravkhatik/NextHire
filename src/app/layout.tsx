@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "@stream-io/video-react-sdk/dist/css/styles.css";
 import "./globals.css";
 import { ClerkProvider, RedirectToSignUp, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
@@ -7,16 +6,6 @@ import ConvexClerkProvider from "@/components/provider/ConvexClerkProvider";impo
 import StreamClientProvider from "@/components/provider/StreamClientProvider";
 import { ThemeProvider } from "@/components/provider/ThemeProvider";
 import { Toaster } from "react-hot-toast";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "NextHire",
@@ -31,12 +20,13 @@ export default function RootLayout({
   return (
     <ConvexClerkProvider>
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className="antialiased">
          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
+            storageKey="nexthire-theme"
           >
 
             <SignedIn>

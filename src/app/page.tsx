@@ -11,6 +11,7 @@ import MeetingModal from "@/components/MeetingModal";
 import LoaderUI from "@/components/LoaderUI";
 import { Loader2Icon } from "lucide-react";
 import MeetingCard from "@/components/MeetingCard";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const router = useRouter();
@@ -30,8 +31,17 @@ export default function Home() {
         setModalType("join");
         setShowModal(true);
         break;
+      case "Aptitude Tests":
+        router.push("/aptitude-tests");
+        break;
+      case "Schedule":
+        router.push("/schedule");
+        break;
+      case "Recordings":
+        router.push("/recordings");
+        break;
       default:
-        router.push(`/${title.toLowerCase()}`);
+        router.push(`/${title.toLowerCase().replace(/\s+/g, "-")}`);
     }
   };
 
@@ -72,9 +82,14 @@ export default function Home() {
         </>
       ) : (
         <>
-          <div>
-            <h1 className="text-3xl font-bold">Your Interviews</h1>
-            <p className="text-muted-foreground mt-1">View and join your scheduled interviews</p>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold">Your Interviews</h1>
+              <p className="text-muted-foreground mt-1">View and join your scheduled interviews</p>
+            </div>
+            <Button onClick={() => router.push("/aptitude-tests")} variant="outline">
+              Take Aptitude Test
+            </Button>
           </div>
 
           <div className="mt-8">

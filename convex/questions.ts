@@ -7,6 +7,7 @@ export const createQuestion = mutation({
     description: v.string(),
     difficulty: v.union(v.literal("easy"), v.literal("medium"), v.literal("hard")),
     leetcodeUrl: v.optional(v.string()),
+    source: v.optional(v.union(v.literal("leetcode"), v.literal("custom"))),
     examples: v.array(
       v.object({
         input: v.string(),
@@ -18,6 +19,7 @@ export const createQuestion = mutation({
       javascript: v.string(),
       python: v.string(),
       java: v.string(),
+      cpp: v.optional(v.string()),
     }),
     constraints: v.optional(v.array(v.string())),
     testCases: v.array(
@@ -49,8 +51,14 @@ export const createQuestion = mutation({
         description: args.description.trim(),
         difficulty: args.difficulty,
         leetcodeUrl: args.leetcodeUrl?.trim() || undefined,
+        source: args.source || "custom", // Default to "custom" if not provided
         examples: args.examples,
-        starterCode: args.starterCode,
+        starterCode: {
+          javascript: args.starterCode.javascript,
+          python: args.starterCode.python,
+          java: args.starterCode.java,
+          cpp: args.starterCode.cpp,
+        },
         constraints: args.constraints || [],
         testCases: args.testCases,
         createdBy: identity.subject,
