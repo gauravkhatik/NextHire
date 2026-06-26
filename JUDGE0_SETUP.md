@@ -62,6 +62,7 @@ JUDGE0_API_KEY=your_api_key
 ## Testing
 
 After setting up the API key, test code execution:
+
 1. Go to an interview meeting
 2. Select Python, Java, or C++
 3. Write and run code
@@ -72,4 +73,3 @@ After setting up the API key, test code execution:
 - **"Judge0 API key not configured"**: Make sure you've set `RAPIDAPI_KEY` or `JUDGE0_API_KEY` in your environment variables
 - **Rate limit errors**: Upgrade your RapidAPI plan or use self-hosted Judge0
 - **Execution timeouts**: Code execution is limited to 5 seconds per request
-
